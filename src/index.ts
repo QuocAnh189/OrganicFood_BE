@@ -5,9 +5,8 @@ import 'reflect-metadata';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUI from 'swagger-ui-express';
 
-import { HOST_NAME, NODE_ENV } from './config';
-import { connectDB } from './constants/config';
-import { API } from './constants/paths';
+import { HOST_NAME, NODE_ENV, connectDB } from './config';
+import { API } from './constants';
 import { defaultErrorHandler } from './middlewares';
 import route from './routes';
 import { logger } from './utils/logger';

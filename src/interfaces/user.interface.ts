@@ -3,7 +3,8 @@ import { ERole } from './auth.interface';
 
 export interface IUser {
   _id?: ObjectId;
-  username: string;
+  firstname: string;
+  lastname: string;
   phone: string;
   avatar: string;
   email: string;
