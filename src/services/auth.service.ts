@@ -1,115 +1,139 @@
 import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from '@/config';
 import HTTP_STATUS from '@/constants/httpStatus';
-import { CreateUserDto, RefreshTokenDto } from '@/dtos';
+import { SignUpUserDto, SignInUserDto, RefreshTokenDto } from '@/dtos';
 import { HttpException } from '@/exceptions/httpException';
 import { DataStoredInToken, ETokenType, IUser, TokenData, TokenPayload } from '@/interfaces';
-import { User, Role, RoleType } from '@/models';
+import { User } from '@/models';
+import { RefreshToken } from '@/models';
 import { compare, hash } from 'bcrypt';
-import { sign, verify } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { Service } from 'typedi';
 
-const createToken = (user: IUser, exp: number, type: ETokenType): TokenData => {
+//generate token
+const generateToken = (user: IUser, exp: number | string, type: ETokenType): TokenData => {
   const dataStoredInToken: DataStoredInToken = {
     id: user._id!.toString(),
     role: user.role,
     type: type,
   };
-  const expiresIn: number = 60 * 60;
 
   return {
-    expiresIn,
-    token: sign(dataStoredInToken, ACCESS_TOKEN_SECRET!, { expiresIn }),
+    expiresIn: exp,
+    token: jwt.sign(dataStoredInToken, ACCESS_TOKEN_SECRET!, { expiresIn: exp }),
   };
 };
 
 @Service()
-export class AuthService {
-  public async signup(userData: CreateUserDto): Promise<{ token: TokenPayload; signUpUserData: IUser }> {
-    const findUser = await User.findOne({ email: userData.email });
-    if (findUser) throw new HttpException(HTTP_STATUS.CONFLICT, `This email ${userData.email} already exists`);
+export class AuthRepository {
+  public async signup(userData: SignUpUserDto): Promise<{ token: TokenPayload; signUpUserData: IUser }> {
+    const findUserByEmail = await User.findOne({ email: userData.email });
+    if (findUserByEmail) {
+      throw new HttpException(HTTP_STATUS.UNPROCESSABLE_ENTITY, `This email already exists`);
+    }
+
+    const findUserByName = await User.findOne({ fullname: userData.fullname });
+    if (findUserByName) {
+      throw new HttpException(HTTP_STATUS.UNPROCESSABLE_ENTITY, `This name already exists`);
+    }
+
+    if (userData.password !== userData.confirmpassword) {
+      throw new HttpException(HTTP_STATUS.CONFLICT, `Confirmpassword is not match`);
+    }
 
     const hashedPassword = await hash(userData.password, 10);
-    const createUserData = new User({
+    const user = await User.create({
       ...userData,
       password: hashedPassword,
     });
 
-    await createUserData.save();
+    const accessTokenExp = '8h';
+    const { token: accessToken } = generateToken(user, accessTokenExp, ETokenType.ACCESS);
 
-    const roleType = await RoleType.findOne({ name: userData.role });
-    if (roleType) {
-      const role = new Role({
-        userId: createUserData._id,
-        roleId: roleType._id,
-      });
+    const refreshTokenExp = '24h';
+    const { token: refreshToken } = generateToken(user, refreshTokenExp, ETokenType.REFRESH);
 
-      role.save();
-    } else {
-      const newRoleType = new RoleType({
-        name: createUserData.role,
-      });
+    user.refreshToken = refreshToken;
+    user.save();
 
-      newRoleType.save();
-
-      const role = new Role({
-        userId: createUserData._id,
-        roleId: newRoleType._id,
-      });
-
-      role.save();
+    const userLogout = await RefreshToken.findOne({ user_id: user._id });
+    if (!userLogout) {
+      await new RefreshToken({
+        user_id: user._id,
+        token: refreshToken,
+      }).save();
     }
-
-    const accessTokenExp = 60 * 60;
-    const refreshTokenExp = 24 * 60 * 60;
-
-    const { token: accessToken } = createToken(createUserData, accessTokenExp, ETokenType.ACCESS);
-
-    const { token: refreshToken } = createToken(createUserData, refreshTokenExp, ETokenType.REFRESH);
-
-    createUserData.refreshToken = refreshToken;
-    createUserData.save();
 
     return {
       token: { accessToken, refreshToken },
-      signUpUserData: createUserData,
+      signUpUserData: user,
     };
   }
 
-  public async login(userData: CreateUserDto): Promise<{ token: TokenPayload; findUser: IUser }> {
-    const findUser = await User.findOne({ email: userData.email });
-    if (!findUser) throw new HttpException(HTTP_STATUS.CONFLICT, `This email ${userData.email} was not found`);
-    if (findUser.isActive === false) throw new HttpException(HTTP_STATUS.CONFLICT, `This user was disabled`);
+  public async signin(userData: SignInUserDto): Promise<{ token: TokenPayload; user: IUser }> {
+    const user = await User.findOne({ email: userData.email });
+    if (!user) {
+      throw new HttpException(HTTP_STATUS.NOT_FOUND, `This email was not found`);
+    }
 
-    const isPasswordMatching: boolean = await compare(userData.password, findUser.password);
+    const isPasswordMatching: boolean = await compare(userData.password, user.password);
+    if (!isPasswordMatching) {
+      throw new HttpException(HTTP_STATUS.CONFLICT, 'Password not matching');
+    }
 
-    if (!isPasswordMatching) throw new HttpException(HTTP_STATUS.CONFLICT, 'Password not matching');
+    if (user.isActive === false) {
+      throw new HttpException(HTTP_STATUS.CONFLICT, `This user was disabled`);
+    }
 
     const accessTokenExp = 60 * 60;
+    const { token: accessToken } = generateToken(user, accessTokenExp, ETokenType.ACCESS);
+
     const refreshTokenExp = 24 * 60 * 60;
+    const { token: refreshToken } = generateToken(user, refreshTokenExp, ETokenType.REFRESH);
 
-    const { token: accessToken } = createToken(findUser, accessTokenExp, ETokenType.ACCESS);
+    user.refreshToken = refreshToken;
+    user.save();
 
-    const { token: refreshToken } = createToken(findUser, refreshTokenExp, ETokenType.REFRESH);
+    const userLogout = await RefreshToken.findOne({ user_id: user._id });
+    if (!userLogout) {
+      await new RefreshToken({
+        user_id: user._id,
+        token: refreshToken,
+      }).save();
+    }
 
-    findUser.refreshToken = refreshToken;
-    findUser.save();
-
-    return { token: { accessToken, refreshToken }, findUser };
+    return { token: { accessToken, refreshToken }, user };
   }
 
   public async refreshToken(tokenData: RefreshTokenDto): Promise<{ token: string }> {
     const { refreshToken } = tokenData;
-    const { id, type } = verify(refreshToken, REFRESH_TOKEN_SECRET!) as DataStoredInToken;
+    const { id, type } = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET!) as DataStoredInToken;
 
-    if (type !== ETokenType.REFRESH) throw new HttpException(HTTP_STATUS.FORBIDDEN, 'Access permission denied!');
+    if (type !== ETokenType.REFRESH) {
+      throw new HttpException(HTTP_STATUS.FORBIDDEN, 'Access permission denied!');
+    }
 
     const findUser = await User.findById(id);
-    if (!findUser) throw new HttpException(HTTP_STATUS.CONFLICT, `This user ${id} was not found`);
-    if (findUser.isActive === false) throw new HttpException(HTTP_STATUS.CONFLICT, `This user ${id} was not active`);
+    if (!findUser) {
+      throw new HttpException(HTTP_STATUS.CONFLICT, `This user ${id} was not found`);
+    }
+
+    if (findUser.isActive === false) {
+      throw new HttpException(HTTP_STATUS.CONFLICT, `This user ${id} was not active`);
+    }
 
     const accessTokenExp = 60 * 60;
-    const { token } = createToken(findUser, accessTokenExp, ETokenType.ACCESS);
+    const { token } = generateToken(findUser, accessTokenExp, ETokenType.REFRESH);
 
     return { token };
+  }
+
+  public async signout(id: string): Promise<any> {
+    const result = await RefreshToken.deleteMany({
+      user_id: id,
+    });
+    if (!result) {
+      throw new HttpException(HTTP_STATUS.BAD_REQUEST, `User with id ${id} has been logged out `);
+    }
+    return `Logged out user id ${id}`;
   }
 }

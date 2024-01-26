@@ -1,8 +1,8 @@
 import HTTP_STATUS from '@/constants/httpStatus';
-import { CreateUserDto, LoginDto, RefreshTokenDto } from '@/dtos';
+import { SignUpUserDto, SignInUserDto, RefreshTokenDto } from '@/dtos';
 import { ResponseDto } from '@/dtos/http.dto';
 import { RequestWithUser } from '@/interfaces';
-import { AuthRepository } from '@/repositories/auth.repository';
+import { AuthRepository } from '@/services/auth.service';
 import { NextFunction, Request, Response } from 'express';
 import Container from 'typedi';
 
@@ -11,7 +11,7 @@ export class AuthController {
 
   public signUp = async (req: Request, res: Response<ResponseDto>, next: NextFunction) => {
     try {
-      const userData: CreateUserDto = req.body;
+      const userData: SignUpUserDto = req.body;
       const { token, signUpUserData } = await this.auth.signup(userData);
 
       res.status(HTTP_STATUS.CREATED).json({
@@ -24,24 +24,23 @@ export class AuthController {
         message: 'signup successfully!',
       });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   };
 
-  public logIn = async (req: Request, res: Response<ResponseDto>, next: NextFunction) => {
+  public signIn = async (req: Request, res: Response<ResponseDto>, next: NextFunction) => {
     try {
-      const userData: LoginDto = req.body;
-      const { token, findUser } = await this.auth.login(userData);
+      const userData: SignInUserDto = req.body;
+      const { token, user } = await this.auth.signin(userData);
 
       res.status(HTTP_STATUS.OK).json({
         data: {
-          user: findUser,
+          user,
           accessToken: token.accessToken,
           refreshToken: token.refreshToken,
         },
         status: HTTP_STATUS.OK,
-        message: 'login successfully!',
+        message: 'signin successfully!',
       });
     } catch (error) {
       next(error);
@@ -56,6 +55,19 @@ export class AuthController {
         data: refreshTokenData,
         status: HTTP_STATUS.OK,
         message: 'refresh successfully',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public signOut = async (req: Request, res: Response<any>, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const message = await this.auth.signout(id);
+
+      res.status(HTTP_STATUS.OK).json({
+        message,
       });
     } catch (error) {
       next(error);

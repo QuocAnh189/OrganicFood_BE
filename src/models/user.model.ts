@@ -1,17 +1,20 @@
-import { ERole, IUser } from '@/interfaces';
+import { IUser } from '@/interfaces';
 import { Schema, model } from 'mongoose';
 import { SCHEMA } from './schema-name';
 
 const userSchema = new Schema<IUser>(
   {
+    email: { type: String, required: true },
+    avatar: { type: String },
     firstname: { type: String, required: true },
     lastname: { type: String, required: true },
-    email: { type: String, required: true },
+    fullname: { type: String, required: true },
     phone: { type: String, required: true },
     password: { type: String, required: true },
-    isActive: { type: Boolean, default: true },
     dob: { type: Date },
-    role: { type: String, enum: ERole, default: ERole.VIEWER },
+    isActive: { type: Boolean, default: true },
+    refreshToken: { type: String },
+    role: { type: String, ref: SCHEMA.ROLE },
   },
   {
     timestamps: true,

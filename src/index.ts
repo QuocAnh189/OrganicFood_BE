@@ -15,7 +15,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-connectDB();
+connectDB()
+  .then(connect => {
+    logger.info(`Database connected: , ${connect.connection.host} ${connect.connection.name}`);
+  })
+  .catch(e => logger.error(e));
+
 app.use(cors());
 app.use(express.json());
 app.use(route);
