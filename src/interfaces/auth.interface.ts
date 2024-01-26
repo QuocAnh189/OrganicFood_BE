@@ -2,9 +2,11 @@ import { Request } from 'express';
 import { IUser } from './user.interface';
 
 export enum ERole {
-  ADMIN = 'ADMIN',
+  CUSTOMER = 'CUSTOMER',
+  FARMER = 'FARMER',
   OWNER = 'OWNER',
-  VIEWER = 'VIEWER',
+  EMPLOYEE = 'EMPLOYEE',
+  ADMIN = 'ADMIN',
 }
 
 export enum ETokenType {

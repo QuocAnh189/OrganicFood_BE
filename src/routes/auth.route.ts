@@ -1,7 +1,6 @@
 import { Router } from 'express';
-
 import { AuthController } from '@/controllers';
-import { LoginDto, RefreshTokenDto } from '@/dtos';
+import { SignInUserDto, RefreshTokenDto, SignUpUserDto } from '@/dtos';
 import { Routes } from '@/interfaces';
 import { ValidationMiddleware } from '@/middlewares/validation.middleware';
 import { wrapRequestHandler } from '@/utils/handles';
@@ -17,7 +16,7 @@ class AuthRoute implements Routes {
   private initializeRoutes() {
     /**
      * @openapi
-     * '/auth/sign-up':
+     * '/auth/signup':
      *  post:
      *     tags:
      *     - Auth
@@ -27,7 +26,7 @@ class AuthRoute implements Routes {
      *      content:
      *        application/json:
      *           schema:
-     *              $ref: '#/components/schemas/CreateUserDto'
+     *              $ref: '#/components/schemas/SignUpUserDto'
      *     responses:
      *      201:
      *        description: Created
@@ -39,11 +38,11 @@ class AuthRoute implements Routes {
      *        description: Internal server error
      *
      */
-    this.router.post('/sign-up', wrapRequestHandler(this.auth.signUp));
+    this.router.post('/signup', ValidationMiddleware(SignUpUserDto), wrapRequestHandler(this.auth.signUp));
 
     /**
      * @openapi
-     * /auth/login:
+     * /auth/signin:
      *  post:
      *     tags:
      *     - Auth
@@ -63,7 +62,7 @@ class AuthRoute implements Routes {
      *      500:
      *        description: Internal server error
      */
-    this.router.post('/login', ValidationMiddleware(LoginDto), wrapRequestHandler(this.auth.logIn));
+    this.router.post('/signin', ValidationMiddleware(SignInUserDto), wrapRequestHandler(this.auth.signIn));
 
     /**
      * @openapi
@@ -91,6 +90,30 @@ class AuthRoute implements Routes {
      *        description: Internal server error
      */
     this.router.post('/refresh', ValidationMiddleware(RefreshTokenDto), wrapRequestHandler(this.auth.refreshToken));
+
+    /**
+     * @openapi
+     * /auth/signout:
+     *  post:
+     *     tags:
+     *     - Auth
+     *     summary: Login to system
+     *     requestBody:
+     *      content:
+     *        application/json:
+     *           schema:
+     *              $ref: '#/components/schemas/LoginDto'
+     *     responses:
+     *      200:
+     *        description: Success
+     *      409:
+     *        description: Conflict
+     *      400:
+     *        description: Bad request
+     *      500:
+     *        description: Internal server error
+     */
+    this.router.post('/signout/:id', wrapRequestHandler(this.auth.signOut));
   }
 }
 

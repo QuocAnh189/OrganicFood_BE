@@ -1,4 +1,14 @@
-import { IsEmail, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 /**
  * @openapi
@@ -14,12 +24,79 @@ import { IsEmail, IsString } from 'class-validator';
  *          type: string
  *          default: User*123
  */
-export class LoginDto {
+export class SignInUserDto {
   @IsEmail()
   public email: string;
 
   @IsString()
   public password: string;
+}
+
+/**
+ * @openapi
+ * components:
+ *  schemas:
+ *    CreateUserDto:
+ *      type: object
+ *      required:
+ *        - email
+ *        - password
+ *        - username
+ *        - phone
+ *      properties:
+ *        email:
+ *          type: string
+ *          default: jane.doe@example.com
+ *        password:
+ *          type: string
+ *          default: User*123
+ *        username:
+ *          type: string
+ *          default: Jane Doe
+ *        phone:
+ *          type: string
+ *          default: 0923456789
+ */
+export class SignUpUserDto {
+  @IsEmail()
+  @IsNotEmpty()
+  @MaxLength(30)
+  public email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(2)
+  @MaxLength(10)
+  public firstname: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(2)
+  @MaxLength(10)
+  public lastname: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(4)
+  @MaxLength(20)
+  public fullname: string;
+
+  @IsString()
+  @IsPhoneNumber()
+  @MaxLength(45)
+  public phone: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(8)
+  @MaxLength(32)
+  public password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(8)
+  @MaxLength(32)
+  public confirmpassword: string;
 }
 
 /**
