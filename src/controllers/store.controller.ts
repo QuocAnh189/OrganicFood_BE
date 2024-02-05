@@ -3,7 +3,7 @@ import { StoreService } from '@/services';
 import { NextFunction, Request, Response } from 'express';
 import Container from 'typedi';
 
-export class storeController {
+export class StoreController {
   public store = Container.get(StoreService);
 
   public getStore = async (req: Request, res: Response, next: NextFunction) => {

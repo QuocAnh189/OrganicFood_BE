@@ -3,7 +3,7 @@ import { ShipperService } from '@/services';
 import { NextFunction, Request, Response } from 'express';
 import Container from 'typedi';
 
-export class shipperController {
+export class ShipperController {
   public shipper = Container.get(ShipperService);
 
   public getShipper = async (req: Request, res: Response, next: NextFunction) => {
