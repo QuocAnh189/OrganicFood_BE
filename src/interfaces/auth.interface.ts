@@ -15,7 +15,7 @@ export enum ETokenType {
 
 export interface DataStoredInToken {
   id: string;
-  role: ERole;
+  role?: ERole;
   type: ETokenType;
 }
 
