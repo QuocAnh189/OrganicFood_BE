@@ -6,5 +6,5 @@ export interface IShipper {
   contact: string;
   deliveryTime: Date;
   address: ObjectId;
-  rate: ObjectId;
+  rates: ObjectId[];
 }

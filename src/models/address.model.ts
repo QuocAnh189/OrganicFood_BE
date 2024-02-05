@@ -1,16 +1,19 @@
 import { IAddress } from '@/interfaces';
 import { Schema, model } from 'mongoose';
 import { SCHEMA } from './schema-name';
-import { Types } from 'mongoose';
 
 const addressSchema = new Schema<IAddress>(
   {
-    userId: { type: Schema.Types.ObjectId, required: true, ref: SCHEMA.USER },
-    name: { type: String },
-    country: { type: String, required: true },
-    city: { type: String, required: true },
-    district: { type: String, required: true },
-    code: { type: String, required: true },
+    ownerId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: SCHEMA.USER || SCHEMA.STORE || SCHEMA.ORDER || SCHEMA.SHIPPER,
+    },
+    country: { type: String },
+    city: { type: String },
+    district: { type: String },
+    street: { type: String },
+    postalCode: { type: String },
   },
   {
     timestamps: true,

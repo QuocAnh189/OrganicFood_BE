@@ -1,5 +1,10 @@
 import { ObjectId } from 'mongodb';
 
+export interface ISize {
+  name: string;
+  value: number;
+}
+
 export interface IProduct {
   _id?: ObjectId;
   name: string;
@@ -10,7 +15,7 @@ export interface IProduct {
   image: string;
   category: ObjectId;
   origin: string;
-  sizes: ObjectId;
+  sizes: ISize[];
   stockQuantity: number;
   rates: ObjectId[];
   purchases: number;
