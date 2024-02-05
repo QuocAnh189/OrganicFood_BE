@@ -3,10 +3,9 @@ import { IUser } from './user.interface';
 
 export enum ERole {
   CUSTOMER = 'CUSTOMER',
-  FARMER = 'FARMER',
-  OWNER = 'OWNER',
-  EMPLOYEE = 'EMPLOYEE',
+  BUSINESS = 'BUSINESS',
   ADMIN = 'ADMIN',
+  STORE = 'STORE',
 }
 
 export enum ETokenType {

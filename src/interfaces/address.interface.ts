@@ -2,10 +2,10 @@ import { ObjectId } from 'mongodb';
 
 export interface IAddress {
   _id?: ObjectId;
-  userId: ObjectId;
-  name: string;
+  ownerId: ObjectId;
   country: string;
   city: string;
   district: string;
-  code: string;
+  street: string;
+  postalCode: string;
 }

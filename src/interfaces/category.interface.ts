@@ -1,6 +1,8 @@
 import { ObjectId } from 'mongodb';
 
-export interface IRole {
+export interface ICategory {
   _id?: ObjectId;
   name: string;
+  image: string;
+  description: string;
 }
