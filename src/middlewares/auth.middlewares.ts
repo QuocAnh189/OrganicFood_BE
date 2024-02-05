@@ -1,5 +1,6 @@
 import { ACCESS_TOKEN_SECRET } from '@/config';
 import { IUser } from '@/interfaces';
+import { Role } from '@/models';
 import { User } from '@/models/user.model';
 import { HttpException } from '@exceptions/httpException';
 import { DataStoredInToken, ERole, ETokenType, RequestWithUser } from '@interfaces/auth.interface';
@@ -48,7 +49,8 @@ export const AuthMiddleware = async (req: RequestWithUser, res: Response, next: 
 
 export const AdminCheckMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   const { user } = req;
-  if (user.role == ERole.ADMIN) {
+  const role = await Role.findById(user.role);
+  if (role.name === ERole.ADMIN) {
     next();
   } else next(new HttpException(403, "Cannot access role admin's resource"));
 };

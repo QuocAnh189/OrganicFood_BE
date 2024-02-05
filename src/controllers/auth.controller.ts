@@ -2,12 +2,12 @@ import HTTP_STATUS from '@/constants/httpStatus';
 import { SignUpUserDto, SignInUserDto, RefreshTokenDto } from '@/dtos';
 import { ResponseDto } from '@/dtos/http.dto';
 import { RequestWithUser } from '@/interfaces';
-import { AuthRepository } from '@/services/auth.service';
+import { AuthService } from '@/services/auth.service';
 import { NextFunction, Request, Response } from 'express';
 import Container from 'typedi';
 
 export class AuthController {
-  public auth = Container.get(AuthRepository);
+  public auth = Container.get(AuthService);
 
   public signUp = async (req: Request, res: Response<ResponseDto>, next: NextFunction) => {
     try {

@@ -12,4 +12,4 @@ const promotionSchema = new Schema<IPromotion>(
   { timestamps: true },
 );
 
-export const promotion = model<IPromotion>(SCHEMA.PROMOTION, promotionSchema);
+export const Promotion = model<IPromotion>(SCHEMA.PROMOTION, promotionSchema);

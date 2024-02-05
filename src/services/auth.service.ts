@@ -13,7 +13,7 @@ import { Service } from 'typedi';
 const generateToken = (user: IUser, exp: number | string, type: ETokenType): TokenData => {
   const dataStoredInToken: DataStoredInToken = {
     id: user._id!.toString(),
-    role: user.role,
+    // role: user.role,
     type: type,
   };
 
@@ -24,7 +24,7 @@ const generateToken = (user: IUser, exp: number | string, type: ETokenType): Tok
 };
 
 @Service()
-export class AuthRepository {
+export class AuthService {
   public async signup(userData: SignUpUserDto): Promise<{ token: TokenPayload; signUpUserData: IUser }> {
     const findUserByEmail = await User.findOne({ email: userData.email });
     if (findUserByEmail) {
@@ -52,7 +52,7 @@ export class AuthRepository {
     const refreshTokenExp = '24h';
     const { token: refreshToken } = generateToken(user, refreshTokenExp, ETokenType.REFRESH);
 
-    user.refreshToken = refreshToken;
+    // user.refreshToken = refreshToken;
     user.save();
 
     const userLogout = await RefreshToken.findOne({ user_id: user._id });
@@ -90,7 +90,7 @@ export class AuthRepository {
     const refreshTokenExp = 24 * 60 * 60;
     const { token: refreshToken } = generateToken(user, refreshTokenExp, ETokenType.REFRESH);
 
-    user.refreshToken = refreshToken;
+    // user.refreshToken = refreshToken;
     user.save();
 
     const userLogout = await RefreshToken.findOne({ user_id: user._id });
