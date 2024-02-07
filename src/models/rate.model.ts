@@ -4,7 +4,7 @@ import { SCHEMA } from './schema-name';
 
 const rateSchema = new Schema<IRate>(
   {
-    userId: { type: Schema.ObjectId, required: true, ref: SCHEMA.USER },
+    user: { type: Schema.ObjectId, required: true, ref: SCHEMA.USER },
     rate: { type: Number, required: true },
     comment: { type: String },
   },
