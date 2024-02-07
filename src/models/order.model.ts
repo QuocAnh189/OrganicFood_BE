@@ -4,7 +4,7 @@ import { SCHEMA } from './schema-name';
 
 const orderSchema = new Schema<IOrder>(
   {
-    userId: { type: Schema.ObjectId, required: true, ref: SCHEMA.USER },
+    user: { type: Schema.ObjectId, required: true, ref: SCHEMA.USER },
     address: { type: Schema.ObjectId, required: true, ref: SCHEMA.ADDRESS },
     orderItems: [{ type: Schema.ObjectId, required: true, ref: SCHEMA.ORDERITEM }],
     totalValue: { type: Number, required: true },

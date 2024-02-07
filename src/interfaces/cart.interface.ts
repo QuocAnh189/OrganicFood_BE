@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb';
 
 export interface ICart {
   _id?: ObjectId;
-  userId: ObjectId;
-  productId: ObjectId;
+  user: ObjectId;
+  product: ObjectId;
   quantity: number;
 }

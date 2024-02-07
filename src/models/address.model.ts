@@ -4,7 +4,7 @@ import { SCHEMA } from './schema-name';
 
 const addressSchema = new Schema<IAddress>(
   {
-    ownerId: {
+    owner: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: SCHEMA.USER || SCHEMA.STORE || SCHEMA.ORDER || SCHEMA.SHIPPER,

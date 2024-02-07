@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb';
 
 export interface IOrder {
   _id: ObjectId;
-  userId: ObjectId;
+  user: ObjectId;
   address: ObjectId;
   orderItems: ObjectId[];
   totalValue: number;

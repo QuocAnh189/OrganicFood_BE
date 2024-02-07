@@ -19,5 +19,5 @@ export interface IProduct {
   stockQuantity: number;
   rates: ObjectId[];
   purchases: number;
-  storeId: ObjectId;
+  store: ObjectId;
 }

@@ -21,7 +21,7 @@ const productSchema = new Schema<IProduct>(
     stockQuantity: { type: Number, required: true },
     rates: [{ type: Schema.ObjectId, default: [], ref: SCHEMA.RATE }],
     purchases: { type: Number, required: true, default: 0 },
-    storeId: { type: Schema.ObjectId, required: true, ref: SCHEMA.STORE },
+    store: { type: Schema.ObjectId, required: true, ref: SCHEMA.STORE },
   },
   { timestamps: true },
 );
