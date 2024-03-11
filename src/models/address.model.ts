@@ -1,6 +1,10 @@
-import { IAddress } from '@/interfaces';
 import { Schema, model } from 'mongoose';
-import { SCHEMA } from './schema-name';
+
+//schema
+import { SCHEMA } from '../constants';
+
+//interface
+import { IAddress } from '@/interfaces';
 
 const addressSchema = new Schema<IAddress>(
   {

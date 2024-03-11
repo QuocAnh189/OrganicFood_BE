@@ -1,6 +1,10 @@
-import { IPromotion } from '@/interfaces';
 import { Schema, model } from 'mongoose';
-import { SCHEMA } from './schema-name';
+
+//schema
+import { SCHEMA } from '../constants';
+
+//interfaces
+import { IPromotion } from '@/interfaces';
 
 const promotionSchema = new Schema<IPromotion>(
   {

@@ -1,6 +1,10 @@
-import { IOrderItem } from '@/interfaces';
 import { Schema, model } from 'mongoose';
-import { SCHEMA } from './schema-name';
+
+//schema
+import { SCHEMA } from '../constants';
+
+//interface
+import { IOrderItem } from '@/interfaces';
 
 const orderItemSchema = new Schema<IOrderItem>(
   {

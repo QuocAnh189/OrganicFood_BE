@@ -1,7 +1,11 @@
-import HTTP_STATUS from '@/constants/httpStatus';
-import { VoucherService } from '@/services';
 import { NextFunction, Request, Response } from 'express';
 import Container from 'typedi';
+
+//constant
+import { HTTP_STATUS } from '@/constants';
+
+//service
+import { VoucherService } from '@/services';
 
 export class VoucherController {
   public voucher = Container.get(VoucherService);

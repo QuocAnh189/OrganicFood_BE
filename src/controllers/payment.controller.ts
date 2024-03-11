@@ -1,7 +1,11 @@
-import HTTP_STATUS from '@/constants/httpStatus';
-import { PaymentService } from '@/services';
 import { NextFunction, Request, Response } from 'express';
 import Container from 'typedi';
+
+//constant
+import { HTTP_STATUS } from '@/constants';
+
+//service
+import { PaymentService } from '@/services';
 
 export class PaymentController {
   public payment = Container.get(PaymentService);

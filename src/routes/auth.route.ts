@@ -1,11 +1,21 @@
 import { Router } from 'express';
-import { AuthController } from '@/controllers';
-import { SignInUserDto, RefreshTokenDto, SignUpUserDto } from '@/dtos';
-import { Routes } from '@/interfaces';
-import { ValidationMiddleware } from '@/middlewares/validation.middleware';
-import { wrapRequestHandler } from '@/utils/handles';
 
-class AuthRoute implements Routes {
+//controller
+import { AuthController } from '@/controllers';
+
+//dto
+import { SignInUserDto, RefreshTokenDto, SignUpUserDto, SignOutDto } from '@/dtos';
+
+//interface
+import { IRoutes } from '@/interfaces';
+
+//middleware
+import { ValidationMiddleware } from '@/middlewares';
+
+//util
+import { wrapRequestHandler } from '@/utils';
+
+class AuthRoute implements IRoutes {
   public router = Router();
   public auth = new AuthController();
 
@@ -113,7 +123,7 @@ class AuthRoute implements Routes {
      *      500:
      *        description: Internal server error
      */
-    this.router.post('/signout/:id', wrapRequestHandler(this.auth.signOut));
+    this.router.post('/signout/:id', ValidationMiddleware(SignOutDto), wrapRequestHandler(this.auth.signOut));
   }
 }
 

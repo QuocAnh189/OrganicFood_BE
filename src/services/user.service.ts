@@ -1,9 +1,17 @@
-import HTTP_STATUS from '@/constants/httpStatus';
-import { HttpException } from '@/exceptions/httpException';
-import { IUser } from '@/interfaces';
-import { User } from '@/models';
 import { ObjectId } from 'mongodb';
 import { Service } from 'typedi';
+
+//constant
+import { HTTP_STATUS } from '@/constants';
+
+//exception
+import { HttpException } from '@/exceptions/httpException';
+
+//interface
+import { IUser } from '@/interfaces';
+
+//model
+import { User } from '@/models';
 
 @Service()
 export class UserService {

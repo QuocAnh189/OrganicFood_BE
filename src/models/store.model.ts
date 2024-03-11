@@ -1,6 +1,10 @@
-import { IStore } from '@/interfaces';
 import { Schema, model } from 'mongoose';
-import { SCHEMA } from './schema-name';
+
+//schema
+import { SCHEMA } from '../constants';
+
+//interface
+import { IStore } from '@/interfaces';
 
 const storeSchema = new Schema<IStore>(
   {

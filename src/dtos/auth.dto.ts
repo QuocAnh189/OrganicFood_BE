@@ -66,25 +66,8 @@ export class SignUpUserDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(2)
-  @MaxLength(10)
-  public firstname: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(2)
-  @MaxLength(10)
-  public lastname: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(4)
-  @MaxLength(20)
-  public fullname: string;
-
-  @IsString()
-  @IsPhoneNumber()
-  @MaxLength(45)
-  public phone: string;
+  @MaxLength(15)
+  public name: string;
 
   @IsString()
   @IsNotEmpty()
@@ -114,4 +97,9 @@ export class SignUpUserDto {
 export class RefreshTokenDto {
   @IsString()
   public refreshToken: string;
+}
+
+export class SignOutDto {
+  @IsString()
+  public id: string;
 }

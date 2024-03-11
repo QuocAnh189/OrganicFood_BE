@@ -1,7 +1,13 @@
-import { OrderItemController } from '@/controllers';
-import { IRoutes } from '@/interfaces';
-import { wrapRequestHandler } from '@/utils/handles';
 import { Router } from 'express';
+
+//controller
+import { OrderItemController } from '@/controllers';
+
+//interface
+import { IRoutes } from '@/interfaces';
+
+//util
+import { wrapRequestHandler } from '@/utils';
 
 class OrderItemRoute implements IRoutes {
   public router = Router();

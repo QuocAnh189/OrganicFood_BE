@@ -1,7 +1,13 @@
-import { CartController } from '@/controllers';
-import { IRoutes } from '@/interfaces';
-import { wrapRequestHandler } from '@/utils/handles';
 import { Router } from 'express';
+
+//controller
+import { CartController } from '@/controllers';
+
+//interface
+import { IRoutes } from '@/interfaces';
+
+//util
+import { wrapRequestHandler } from '@/utils';
 
 class CartRoute implements IRoutes {
   public router = Router();

@@ -1,7 +1,13 @@
-import { VoucherController } from '@/controllers';
-import { IRoutes } from '@/interfaces';
-import { wrapRequestHandler } from '@/utils/handles';
 import { Router } from 'express';
+
+//controller
+import { VoucherController } from '@/controllers';
+
+//interface
+import { IRoutes } from '@/interfaces';
+
+//util
+import { wrapRequestHandler } from '@/utils';
 
 class VoucherRoute implements IRoutes {
   public router = Router();

@@ -1,7 +1,11 @@
-import HTTP_STATUS from '@/constants/httpStatus';
-import { VendorService } from '@/services';
 import { NextFunction, Request, Response } from 'express';
 import Container from 'typedi';
+
+//constant
+import { HTTP_STATUS } from '@/constants';
+
+//service
+import { VendorService } from '@/services';
 
 export class VendorController {
   public vendor = Container.get(VendorService);

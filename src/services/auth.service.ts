@@ -1,13 +1,22 @@
 import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from '@/config';
-import HTTP_STATUS from '@/constants/httpStatus';
-import { SignUpUserDto, SignInUserDto, RefreshTokenDto } from '@/dtos';
-import { HttpException } from '@/exceptions/httpException';
-import { DataStoredInToken, ETokenType, IUser, TokenData, TokenPayload } from '@/interfaces';
-import { User } from '@/models';
-import { RefreshToken } from '@/models';
 import { compare, hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Service } from 'typedi';
+
+//exception
+import { HttpException } from '@/exceptions/httpException';
+
+//constant
+import { HTTP_STATUS } from '@/constants';
+
+//dto
+import { SignUpUserDto, SignInUserDto, RefreshTokenDto } from '@/dtos';
+
+//interface
+import { DataStoredInToken, ETokenType, IUser, TokenData, TokenPayload } from '@/interfaces';
+
+//model
+import { User, RefreshToken } from '@/models';
 
 //generate token
 const generateToken = (user: IUser, exp: number | string, type: ETokenType): TokenData => {
@@ -31,7 +40,7 @@ export class AuthService {
       throw new HttpException(HTTP_STATUS.UNPROCESSABLE_ENTITY, `This email already exists`);
     }
 
-    const findUserByName = await User.findOne({ fullname: userData.fullname });
+    const findUserByName = await User.findOne({ name: userData.name });
     if (findUserByName) {
       throw new HttpException(HTTP_STATUS.UNPROCESSABLE_ENTITY, `This name already exists`);
     }
@@ -53,7 +62,7 @@ export class AuthService {
     const { token: refreshToken } = generateToken(user, refreshTokenExp, ETokenType.REFRESH);
 
     // user.refreshToken = refreshToken;
-    user.save();
+    // user.save();
 
     const userLogout = await RefreshToken.findOne({ user_id: user._id });
     if (!userLogout) {

@@ -1,7 +1,13 @@
-import { StoreController } from '@/controllers';
-import { IRoutes } from '@/interfaces';
-import { wrapRequestHandler } from '@/utils/handles';
 import { Router } from 'express';
+
+//controller
+import { StoreController } from '@/controllers';
+
+//interface
+import { IRoutes } from '@/interfaces';
+
+//util
+import { wrapRequestHandler } from '@/utils';
 
 class StoreRoute implements IRoutes {
   public router = Router();

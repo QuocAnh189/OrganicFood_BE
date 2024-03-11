@@ -6,8 +6,10 @@ export interface IUser {
   name: string;
   avatar: string;
   phone: string;
+  gender: string;
   password: string;
+  birthDay: Date;
   isActive: boolean;
-  addresses: ObjectId;
+  addresses: ObjectId[];
   role: ObjectId;
 }

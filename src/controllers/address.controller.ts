@@ -1,7 +1,11 @@
-import HTTP_STATUS from '@/constants/httpStatus';
-import { AddressService } from '@/services';
 import { NextFunction, Request, Response } from 'express';
 import Container from 'typedi';
+
+//service
+import { AddressService } from '@/services';
+
+//constant
+import { HTTP_STATUS } from '@/constants';
 
 export class AddressController {
   public address = Container.get(AddressService);
