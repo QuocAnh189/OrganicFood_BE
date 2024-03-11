@@ -1,7 +1,13 @@
-import { PaymentController } from '@/controllers';
-import { IRoutes } from '@/interfaces';
-import { wrapRequestHandler } from '@/utils/handles';
 import { Router } from 'express';
+
+//controller
+import { PaymentController } from '@/controllers';
+
+//interface
+import { IRoutes } from '@/interfaces';
+
+//util
+import { wrapRequestHandler } from '@/utils/handles';
 
 class PaymentRoute implements IRoutes {
   public router = Router();

@@ -1,6 +1,10 @@
-import { IProduct, ISize } from '@/interfaces';
 import { Schema, model } from 'mongoose';
-import { SCHEMA } from './schema-name';
+
+//schema
+import { SCHEMA } from '../constants';
+
+//interface
+import { IProduct, ISize } from '@/interfaces';
 
 const SizeSchema = new Schema<ISize>({
   name: { type: String, required: true },

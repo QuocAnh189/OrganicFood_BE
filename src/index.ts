@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import 'reflect-metadata';
+
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUI from 'swagger-ui-express';
 
@@ -24,14 +25,16 @@ connectDB()
 app.use(cors());
 app.use(express.json());
 app.use(route);
+app.use(defaultErrorHandler);
 
+//swagger
 const options: swaggerJSDoc.Options = {
   definition: {
     openapi: '3.0.0',
     info: {
       title: 'Organic Food Specification',
       version: '1.0.0',
-      description: 'Organic Food API Specification, website for organic food model',
+      description: 'Organic Food API Specification, website for organic food',
     },
     components: {
       securitySchemes: {
@@ -53,8 +56,6 @@ const options: swaggerJSDoc.Options = {
 };
 const specs = swaggerJSDoc(options);
 app.use('/api-documentation', swaggerUI.serve, swaggerUI.setup(specs));
-
-app.use(defaultErrorHandler);
 
 app.listen(PORT, () => {
   logger.info(`=================================`);

@@ -1,6 +1,10 @@
-import { ICart } from '@/interfaces';
 import { Schema, model } from 'mongoose';
-import { SCHEMA } from './schema-name';
+
+//schema
+import { SCHEMA } from '../constants';
+
+//interfaces
+import { ICart } from '@/interfaces';
 
 const cartSchema = new Schema<ICart>(
   {

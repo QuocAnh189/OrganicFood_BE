@@ -1,7 +1,11 @@
-import HTTP_STATUS from '@/constants/httpStatus';
-import { UserService } from '@/services';
 import { Request, Response, NextFunction } from 'express';
 import Container from 'typedi';
+
+//constant
+import { HTTP_STATUS } from '@/constants';
+
+//service
+import { UserService } from '@/services';
 
 export class UserController {
   public user = Container.get(UserService);

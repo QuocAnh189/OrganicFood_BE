@@ -1,6 +1,10 @@
-import { IRefreshToken } from '@/interfaces';
 import { Schema, model } from 'mongoose';
-import { SCHEMA } from './schema-name';
+
+//schema
+import { SCHEMA } from '../constants';
+
+//interface
+import { IRefreshToken } from '@/interfaces';
 
 const RefreshTokenSchema = new Schema<IRefreshToken>(
   {

@@ -1,6 +1,10 @@
-import { IVoucher } from '@/interfaces';
 import { Schema, model } from 'mongoose';
-import { SCHEMA } from './schema-name';
+
+//schema
+import { SCHEMA } from '../constants';
+
+//interface
+import { IVoucher } from '@/interfaces';
 
 const voucherSchema = new Schema<IVoucher>(
   {

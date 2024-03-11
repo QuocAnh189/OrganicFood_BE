@@ -1,6 +1,10 @@
-import { IVendor } from '@/interfaces';
 import { Schema, model } from 'mongoose';
-import { SCHEMA } from './schema-name';
+
+//schema
+import { SCHEMA } from '../constants';
+
+//interface
+import { IVendor } from '@/interfaces';
 
 const vendorSchema = new Schema<IVendor>(
   {

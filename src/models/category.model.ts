@@ -1,6 +1,10 @@
-import { ICategory } from '@/interfaces';
 import { Schema, model } from 'mongoose';
-import { SCHEMA } from './schema-name';
+
+//schema
+import { SCHEMA } from '../constants';
+
+//interface
+import { ICategory } from '@/interfaces';
 
 const categorySchema = new Schema<ICategory>(
   {

@@ -1,6 +1,10 @@
-import { IRate } from '@/interfaces';
 import { Schema, model } from 'mongoose';
-import { SCHEMA } from './schema-name';
+
+//schema
+import { SCHEMA } from '../constants';
+
+//interface
+import { IRate } from '@/interfaces';
 
 const rateSchema = new Schema<IRate>(
   {

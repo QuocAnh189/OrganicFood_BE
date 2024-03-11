@@ -1,6 +1,10 @@
-import { IShipper } from '@/interfaces';
 import { Schema, model } from 'mongoose';
-import { SCHEMA } from './schema-name';
+
+//schema
+import { SCHEMA } from '../constants';
+
+//interface
+import { IShipper } from '@/interfaces';
 
 const shipperSchema = new Schema<IShipper>(
   {

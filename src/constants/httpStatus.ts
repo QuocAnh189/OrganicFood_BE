@@ -1,4 +1,4 @@
-const HTTP_STATUS: { [key: string]: number } = {
+export const HTTP_STATUS: { [key: string]: number } = {
   OK: 200,
   CREATED: 201,
   ACCEPTED: 202,
@@ -12,5 +12,3 @@ const HTTP_STATUS: { [key: string]: number } = {
   UNPROCESSABLE_ENTITY: 422,
   INTERNAL_SERVER_ERROR: 500,
 } as const;
-
-export default HTTP_STATUS;
